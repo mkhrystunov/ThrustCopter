@@ -1,0 +1,166 @@
+
+ThrustCopter.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+background
+  rotate: false
+  xy: 1, 535
+  size: 800, 480
+  orig: 800, 480
+  offset: 0, 0
+  index: -1
+groundGrass
+  rotate: false
+  xy: 1, 462
+  size: 808, 71
+  orig: 808, 71
+  offset: 0, 0
+  index: -1
+gameover
+  rotate: false
+  xy: 1, 382
+  size: 412, 78
+  orig: 412, 78
+  offset: 0, 0
+  index: -1
+rockGrassDown
+  rotate: false
+  xy: 803, 776
+  size: 108, 239
+  orig: 108, 239
+  offset: 0, 0
+  index: -1
+rockGrassUp
+  rotate: false
+  xy: 803, 535
+  size: 108, 239
+  orig: 108, 239
+  offset: 0, 0
+  index: -1
+shield3
+  rotate: false
+  xy: 1, 243
+  size: 144, 137
+  orig: 144, 137
+  offset: 0, 0
+  index: -1
+shield2
+  rotate: false
+  xy: 1, 122
+  size: 143, 119
+  orig: 143, 119
+  offset: 0, 0
+  index: -1
+shield1
+  rotate: false
+  xy: 147, 272
+  size: 133, 108
+  orig: 133, 108
+  offset: 0, 0
+  index: -1
+life
+  rotate: false
+  xy: 1, 1
+  size: 114, 119
+  orig: 114, 119
+  offset: 0, 0
+  index: -1
+planeRed3
+  rotate: false
+  xy: 415, 387
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+planeRed1
+  rotate: false
+  xy: 913, 942
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+planeRed2
+  rotate: false
+  xy: 282, 307
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1
+tap2
+  rotate: false
+  xy: 811, 474
+  size: 59, 59
+  orig: 59, 59
+  offset: 0, 0
+  index: -1
+tap1
+  rotate: false
+  xy: 505, 401
+  size: 59, 59
+  orig: 59, 59
+  offset: 0, 0
+  index: -1
+meteorBrown_med1
+  rotate: false
+  xy: 913, 897
+  size: 43, 43
+  orig: 43, 43
+  offset: 0, 0
+  index: -1
+meteorBrown_med2
+  rotate: false
+  xy: 566, 420
+  size: 45, 40
+  orig: 45, 40
+  offset: 0, 0
+  index: -1
+star_pickup
+  rotate: false
+  xy: 372, 342
+  size: 39, 38
+  orig: 39, 38
+  offset: 0, 0
+  index: -1
+shield_pickup
+  rotate: false
+  xy: 282, 275
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+meteorBrown_small1
+  rotate: false
+  xy: 872, 505
+  size: 28, 28
+  orig: 28, 28
+  offset: 0, 0
+  index: -1
+meteorBrown_small2
+  rotate: false
+  xy: 147, 244
+  size: 29, 26
+  orig: 29, 26
+  offset: 0, 0
+  index: -1
+fuel_pickup
+  rotate: false
+  xy: 117, 90
+  size: 19, 30
+  orig: 19, 30
+  offset: 0, 0
+  index: -1
+meteorBrown_tiny1
+  rotate: false
+  xy: 1003, 997
+  size: 18, 18
+  orig: 18, 18
+  offset: 0, 0
+  index: -1
+meteorBrown_tiny2
+  rotate: false
+  xy: 913, 880
+  size: 16, 15
+  orig: 16, 15
+  offset: 0, 0
+  index: -1
