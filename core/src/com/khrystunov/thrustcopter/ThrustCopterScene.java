@@ -6,6 +6,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -62,6 +63,14 @@ public class ThrustCopterScene extends ScreenAdapter {
     Vector2 meteorVelocity = new Vector2();
     float nextMeteorIn;
 
+    Vector3 pickupTiming = new Vector3();
+    Array<Pickup> pickupsInScene = new Array<Pickup>();
+    int starCount;
+    float fuelCount = 100;
+    int shieldCount;
+    TextureRegion fuelIndicator;
+    float fuelPercentage;
+
     InputAdapter inputAdapter = new InputAdapter() {
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -70,9 +79,11 @@ public class ThrustCopterScene extends ScreenAdapter {
 
             camera.unproject(touchPosition);
 
-            boolean isUp = touchPosition.y < game.viewport.getWorldHeight() / 2;
-            tmpVector.set(0, isUp ? TOUCH_IMPULSE : -TOUCH_IMPULSE);
-            planeVelocity.add(tmpVector);
+            if (fuelCount > 0) {
+                boolean isUp = touchPosition.y < game.viewport.getWorldHeight() / 2;
+                tmpVector.set(0, isUp ? TOUCH_IMPULSE : -TOUCH_IMPULSE);
+                planeVelocity.add(tmpVector);
+            }
 //            tmpVector.set(planePosition.x, planePosition.y);
 //            tmpVector.sub(touchPosition.x, touchPosition.y).nor();
 //            planeVelocity.mulAdd(
@@ -90,7 +101,7 @@ public class ThrustCopterScene extends ScreenAdapter {
 
     Vector3 touchPosition = new Vector3();
     Vector2 tmpVector = new Vector2();
-    private static final int TOUCH_IMPULSE = 180;
+    private static final int TOUCH_IMPULSE = 250;
     TextureRegion tap1, tap2;
     float tapDrawTime;
     private static final float TAP_DRAW_TIME_MAX = 0.5f;
@@ -101,12 +112,12 @@ public class ThrustCopterScene extends ScreenAdapter {
         camera = thrustCopter.camera;
         atlas = thrustCopter.atlas;
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/journey_3.mp3"));
+        music = thrustCopter.manager.get("sounds/journey_3.mp3", Music.class);
         music.setLooping(true);
         music.play();
-        tapSound = Gdx.audio.newSound(Gdx.files.internal("sounds/pop.ogg"));
-        crashSound = Gdx.audio.newSound(Gdx.files.internal("sounds/crash.ogg"));
-        spawnSound = Gdx.audio.newSound(Gdx.files.internal("sounds/alarm.ogg"));
+        tapSound = thrustCopter.manager.get("sounds/pop.ogg", Sound.class);
+        crashSound = thrustCopter.manager.get("sounds/crash.ogg", Sound.class);
+        spawnSound = thrustCopter.manager.get("sounds/alarm.ogg", Sound.class);
 
         background = atlas.findRegion("background");
         terrainBelow = atlas.findRegion("groundGrass");
@@ -122,6 +133,8 @@ public class ThrustCopterScene extends ScreenAdapter {
         meteorTextures.add(atlas.findRegion("meteorBrown_small2"));
         meteorTextures.add(atlas.findRegion("meteorBrown_tiny1"));
         meteorTextures.add(atlas.findRegion("meteorBrown_tiny2"));
+
+        fuelIndicator = atlas.findRegion("life");
 
         plane = new Animation(
                 0.05f,
@@ -141,6 +154,12 @@ public class ThrustCopterScene extends ScreenAdapter {
 
     private void resetScene() {
         pillars.clear();
+        pickupsInScene.clear();
+        pickupTiming.x = 1 + (float) Math.random() * 2;
+        pickupTiming.y = 3 + (float) Math.random() * 2;
+        pickupTiming.z = 1 + (float) Math.random() * 3;
+        fuelCount = 100;
+        fuelPercentage = 114;
         lastPillarPosition = new Vector2();
         meteorInScene = false;
         nextMeteorIn = (float) Math.random() * 5;
@@ -180,6 +199,7 @@ public class ThrustCopterScene extends ScreenAdapter {
         if (gameState != GameState.ACTION) {
             return;
         }
+        checkAndAddPickup(deltaTime);
 
         planeAnimTime += deltaTime * 0.5;
 
@@ -188,6 +208,9 @@ public class ThrustCopterScene extends ScreenAdapter {
         planeVelocity.add(scrollVelocity);
         planePosition.mulAdd(planeVelocity, deltaTime);
         float deltaPosition = planePosition.x - planeDefaultPosition.x;
+
+        fuelCount -= 6 * deltaTime;
+        fuelPercentage = fuelIndicator.getRegionWidth() * fuelCount / 100;
 
         terrainOffset -= deltaPosition;
         planePosition.x = planeDefaultPosition.x;
@@ -264,6 +287,21 @@ public class ThrustCopterScene extends ScreenAdapter {
                 }
             }
         }
+        for (Pickup pickup : pickupsInScene) {
+            pickup.pickupPosition.x -= deltaPosition;
+            if (pickup.pickupPosition.x + pickup.pickupTexture.getRegionWidth() < -10) {
+                pickupsInScene.removeValue(pickup, false);
+            }
+            obstacleRect.set(
+                    pickup.pickupPosition.x,
+                    pickup.pickupPosition.y,
+                    pickup.pickupTexture.getRegionWidth(),
+                    pickup.pickupTexture.getRegionHeight()
+            );
+            if (planeRect.overlaps(obstacleRect)) {
+                pickIt(pickup);
+            }
+        }
     }
 
     private void drawScene() {
@@ -283,6 +321,9 @@ public class ThrustCopterScene extends ScreenAdapter {
         if (meteorInScene) {
             batch.draw(selectedMeteorTexture, meteorPosition.x, meteorPosition.y);
         }
+        for (Pickup pickup : pickupsInScene) {
+            batch.draw(pickup.pickupTexture, pickup.pickupPosition.x, pickup.pickupPosition.y);
+        }
         batch.draw(terrainBelow, terrainOffset, 0);
         batch.draw(terrainBelow, terrainOffset + terrainBelow.getRegionWidth(), 0);
         batch.draw(terrainAbove, terrainOffset, 480 - terrainAbove.getRegionHeight());
@@ -299,6 +340,10 @@ public class ThrustCopterScene extends ScreenAdapter {
                 batch.draw(gameOver, 400 - 206, 240 - 80);
                 break;
         }
+        batch.setColor(Color.BLACK);
+        batch.draw(fuelIndicator, 10, 350);
+        batch.setColor(Color.WHITE);
+        batch.draw(fuelIndicator, 10, 350, 0, 0, fuelPercentage, fuelIndicator.getRegionHeight(), 1, 1, 0);
         batch.end();
     }
 
@@ -307,7 +352,7 @@ public class ThrustCopterScene extends ScreenAdapter {
         if (pillars.size == 0) {
             pillarPosition.x = (float) (800 + Math.random() * 600);
         } else {
-            pillarPosition.x = lastPillarPosition.x + (float) (200 + Math.random() * 600);
+            pillarPosition.x = lastPillarPosition.x + (float) (600 + Math.random() * 600);
         }
         if (MathUtils.randomBoolean()) {
             pillarPosition.y = 1;
@@ -334,5 +379,65 @@ public class ThrustCopterScene extends ScreenAdapter {
         destination.y = (float) (80 + Math.random() * 320);
         destination.sub(meteorPosition).nor();
         meteorVelocity.mulAdd(destination, METEOR_SPEED);
+    }
+
+    private void checkAndAddPickup(float delta) {
+        pickupTiming.sub(delta);
+        if (pickupTiming.x <= 0) {
+            pickupTiming.x = (float) (0.5 + Math.random() * 0.5);
+            if (addPickup(Pickup.STAR)) {
+                pickupTiming.x = 1 + (float) Math.random() * 2;
+            }
+        }
+        if (pickupTiming.y <= 0) {
+            pickupTiming.y = (float) (0.5 + Math.random() * 0.5);
+            if (addPickup(Pickup.FUEL)) {
+                pickupTiming.y = 3 + (float) Math.random() * 2;
+            }
+        }
+        if (pickupTiming.z <= 0) {
+            pickupTiming.z = (float) (0.5 + Math.random() * 0.5);
+            if (addPickup(Pickup.SHIELD)) {
+                pickupTiming.z = 10 + (float) Math.random() * 3;
+            }
+        }
+    }
+
+    private boolean addPickup(int pickupType) {
+        Vector2 randomPosition = new Vector2();
+        randomPosition.x = 820;
+        randomPosition.y = (float) (80 + Math.random() * 320);
+        Rectangle obstacleRect = new Rectangle();
+        for (Vector2 vec : pillars) {
+            obstacleRect.set(
+                    vec.x,
+                    vec.y == 1 ? 0 : 480 - pillarDown.getRegionHeight(),
+                    pillarUp.getRegionHeight(),
+                    pillarUp.getRegionWidth()
+            );
+            if (obstacleRect.contains(randomPosition)) {
+                return false;
+            }
+        }
+        Pickup tempPickup = new Pickup(pickupType, game.manager);
+        tempPickup.pickupPosition.set(randomPosition);
+        pickupsInScene.add(tempPickup);
+        return true;
+    }
+
+    private void pickIt(Pickup pickup) {
+        pickup.pickupSound.play();
+        switch (pickup.pickupType) {
+            case Pickup.STAR:
+                starCount += pickup.pickupValue;
+                break;
+            case Pickup.SHIELD:
+                shieldCount = pickup.pickupValue;
+                break;
+            case Pickup.FUEL:
+                fuelCount = pickup.pickupValue;
+                break;
+        }
+        pickupsInScene.removeValue(pickup, false);
     }
 }

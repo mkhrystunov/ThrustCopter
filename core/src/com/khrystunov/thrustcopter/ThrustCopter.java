@@ -37,11 +37,13 @@ public class ThrustCopter extends Game {
 
     @Override
     public void create() {
-        manager.load("gameover.png", Texture.class);
         manager.load("sounds/journey_3.mp3", Music.class);
         manager.load("sounds/pop.ogg", Sound.class);
         manager.load("sounds/crash.ogg", Sound.class);
         manager.load("sounds/alarm.ogg", Sound.class);
+        manager.load("sounds/star.ogg", Sound.class);
+        manager.load("sounds/shield.ogg", Sound.class);
+        manager.load("sounds/fuel.ogg", Sound.class);
         manager.load("ThrustCopter.pack", TextureAtlas.class);
         manager.finishLoading();
 
