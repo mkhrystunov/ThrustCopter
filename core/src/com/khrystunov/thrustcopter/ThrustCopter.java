@@ -26,6 +26,8 @@ public class ThrustCopter extends Game {
     public AssetManager manager;
 
     public BitmapFont font;
+    public float soundVolume = 1;
+    public boolean soundEnabled = true;
 
     public ThrustCopter() {
         fpsLogger = new FPSLogger();

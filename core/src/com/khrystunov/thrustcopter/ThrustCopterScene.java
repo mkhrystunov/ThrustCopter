@@ -74,7 +74,7 @@ public class ThrustCopterScene extends ScreenAdapter {
     InputAdapter inputAdapter = new InputAdapter() {
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            tapSound.play();
+            if (game.soundEnabled) tapSound.play();
             touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 
             camera.unproject(touchPosition);
@@ -116,10 +116,12 @@ public class ThrustCopterScene extends ScreenAdapter {
 
         music = thrustCopter.manager.get("sounds/journey_3.mp3", Music.class);
         music.setLooping(true);
-        music.play();
-        tapSound = thrustCopter.manager.get("sounds/pop.ogg", Sound.class);
-        crashSound = thrustCopter.manager.get("sounds/crash.ogg", Sound.class);
-        spawnSound = thrustCopter.manager.get("sounds/alarm.ogg", Sound.class);
+        if (game.soundEnabled) music.play();
+        if (game.soundEnabled) {
+            tapSound = thrustCopter.manager.get("sounds/pop.ogg", Sound.class);
+            crashSound = thrustCopter.manager.get("sounds/crash.ogg", Sound.class);
+            spawnSound = thrustCopter.manager.get("sounds/alarm.ogg", Sound.class);
+        }
 
         background = atlas.findRegion("background");
         terrainBelow = atlas.findRegion("groundGrass");
@@ -402,7 +404,7 @@ public class ThrustCopterScene extends ScreenAdapter {
         if (meteorInScene) {
             return;
         }
-        spawnSound.play();
+        if (game.soundEnabled) spawnSound.play();
         meteorInScene = true;
         int id = (int) (Math.random() * meteorTextures.size);
         selectedMeteorTexture = meteorTextures.get(id);
@@ -460,7 +462,7 @@ public class ThrustCopterScene extends ScreenAdapter {
     }
 
     private void pickIt(Pickup pickup) {
-        pickup.pickupSound.play();
+        if (game.soundEnabled) pickup.pickupSound.play();
         switch (pickup.pickupType) {
             case Pickup.STAR:
                 starCount += pickup.pickupValue;
@@ -477,7 +479,7 @@ public class ThrustCopterScene extends ScreenAdapter {
 
     private void endGame() {
         if (gameState != GameState.GAME_OVER) {
-            crashSound.play();
+            if (game.soundEnabled) crashSound.play();
             gameState = GameState.GAME_OVER;
             explosion.reset();
             explosion.setPosition(planePosition.x + 40, planePosition.y + 40);

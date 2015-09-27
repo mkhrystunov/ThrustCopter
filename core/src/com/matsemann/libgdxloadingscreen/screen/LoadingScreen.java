@@ -5,6 +5,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.khrystunov.thrustcopter.MenuScene;
 import com.khrystunov.thrustcopter.ThrustCopter;
 import com.khrystunov.thrustcopter.ThrustCopterScene;
 import com.matsemann.libgdxloadingscreen.LoadingBar;
@@ -49,7 +51,7 @@ public class LoadingScreen extends ScreenAdapter {
         game.manager.finishLoading();
 
         // Initialize the stage where we will place everything
-        stage = new Stage();
+        stage = new Stage(game.viewport);
 
         // Get our textureatlas from the manager
         TextureAtlas atlas = game.manager.get("data/loading.pack", TextureAtlas.class);
@@ -86,6 +88,7 @@ public class LoadingScreen extends ScreenAdapter {
         game.manager.load("sounds/shield.ogg", Sound.class);
         game.manager.load("sounds/fuel.ogg", Sound.class);
         game.manager.load("ThrustCopter.pack", TextureAtlas.class);
+        game.manager.load("title.png", Texture.class);
         game.manager.load("fonts/comic-40.fnt", BitmapFont.class);
         game.manager.load("particles/smoke", ParticleEffect.class);
         game.manager.load("particles/explosion", ParticleEffect.class);
@@ -137,7 +140,7 @@ public class LoadingScreen extends ScreenAdapter {
         if (game.manager.update()) { // Load some, will return true if done loading
             game.atlas = game.manager.get("ThrustCopter.pack", TextureAtlas.class);
             game.font = game.manager.get("fonts/comic-40.fnt", BitmapFont.class);
-            game.setScreen(new ThrustCopterScene(game));
+            game.setScreen(new MenuScene(game));
         }
 
         // Interpolate the percentage to make it more smooth
