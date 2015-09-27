@@ -27,7 +27,7 @@ public class Pickup {
                 break;
             case SHIELD:
                 pickupTexture = atlas.findRegion("shield_pickup");
-                pickupValue = 15;
+                pickupValue = 5;
                 pickupSound = manager.get("sounds/shield.ogg", Sound.class);
                 break;
             case FUEL:

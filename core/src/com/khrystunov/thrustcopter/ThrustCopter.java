@@ -1,18 +1,16 @@
 package com.khrystunov.thrustcopter;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.matsemann.libgdxloadingscreen.screen.LoadingScreen;
 
 public class ThrustCopter extends Game {
     public static final int screenWidth = 800;
@@ -27,6 +25,8 @@ public class ThrustCopter extends Game {
 
     public AssetManager manager;
 
+    public BitmapFont font;
+
     public ThrustCopter() {
         fpsLogger = new FPSLogger();
         camera = new OrthographicCamera();
@@ -37,19 +37,8 @@ public class ThrustCopter extends Game {
 
     @Override
     public void create() {
-        manager.load("sounds/journey_3.mp3", Music.class);
-        manager.load("sounds/pop.ogg", Sound.class);
-        manager.load("sounds/crash.ogg", Sound.class);
-        manager.load("sounds/alarm.ogg", Sound.class);
-        manager.load("sounds/star.ogg", Sound.class);
-        manager.load("sounds/shield.ogg", Sound.class);
-        manager.load("sounds/fuel.ogg", Sound.class);
-        manager.load("ThrustCopter.pack", TextureAtlas.class);
-        manager.finishLoading();
-
         batch = new SpriteBatch();
-        atlas = manager.get("ThrustCopter.pack", TextureAtlas.class);
-        setScreen(new ThrustCopterScene(this));
+        setScreen(new LoadingScreen(this));
     }
 
     @Override
