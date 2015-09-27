@@ -45,17 +45,6 @@ public class LoadingScreen extends ScreenAdapter {
     public void show() {
         // Tell the manager to load assets for the loading screen
         game.manager.load("data/loading.pack", TextureAtlas.class);
-        game.manager.load("sounds/journey_3.mp3", Music.class);
-        game.manager.load("sounds/pop.ogg", Sound.class);
-        game.manager.load("sounds/crash.ogg", Sound.class);
-        game.manager.load("sounds/alarm.ogg", Sound.class);
-        game.manager.load("sounds/star.ogg", Sound.class);
-        game.manager.load("sounds/shield.ogg", Sound.class);
-        game.manager.load("sounds/fuel.ogg", Sound.class);
-        game.manager.load("ThrustCopter.pack", TextureAtlas.class);
-        game.manager.load("fonts/comic-40.fnt", BitmapFont.class);
-        game.manager.load("particles/smoke", ParticleEffect.class);
-        game.manager.load("particles/explosion", ParticleEffect.class);
         // Wait until they are finishegd loading
         game.manager.finishLoading();
 
@@ -89,6 +78,17 @@ public class LoadingScreen extends ScreenAdapter {
         stage.addActor(logo);
 
         // Add everything to be loaded, for instance:
+        game.manager.load("sounds/journey_3.mp3", Music.class);
+        game.manager.load("sounds/pop.ogg", Sound.class);
+        game.manager.load("sounds/crash.ogg", Sound.class);
+        game.manager.load("sounds/alarm.ogg", Sound.class);
+        game.manager.load("sounds/star.ogg", Sound.class);
+        game.manager.load("sounds/shield.ogg", Sound.class);
+        game.manager.load("sounds/fuel.ogg", Sound.class);
+        game.manager.load("ThrustCopter.pack", TextureAtlas.class);
+        game.manager.load("fonts/comic-40.fnt", BitmapFont.class);
+        game.manager.load("particles/smoke", ParticleEffect.class);
+        game.manager.load("particles/explosion", ParticleEffect.class);
         // game.manager.load("data/assets1.pack", TextureAtlas.class);
         // game.manager.load("data/assets2.pack", TextureAtlas.class);
         // game.manager.load("data/assets3.pack", TextureAtlas.class);

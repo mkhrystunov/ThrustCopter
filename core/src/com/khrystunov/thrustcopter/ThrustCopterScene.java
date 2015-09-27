@@ -186,6 +186,7 @@ public class ThrustCopterScene extends ScreenAdapter {
         gravity.set(0, -4);
         planeDefaultPosition.set(200 - 88 / 2, 240 - 73 / 2);
         planePosition.set(planeDefaultPosition.x, planeDefaultPosition.y);
+        smoke.reset();
     }
 
     @Override
