@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-public class MenuScene extends ScreenAdapter {
+public class MenuScene extends BaseScene {
 
     private final Table table;
     private final TextButton playButton;
@@ -25,7 +25,6 @@ public class MenuScene extends ScreenAdapter {
     private final CheckBox muteCheckbox;
     private final Slider volumeSlider;
     private final TextButton backButton;
-    private ThrustCopter game;
     private Stage stage;
     private Skin skin;
     private Image screenBg;
@@ -33,7 +32,7 @@ public class MenuScene extends ScreenAdapter {
     private Label helpTip;
 
     public MenuScene(ThrustCopter thrustCopter) {
-        game = thrustCopter;
+        super(thrustCopter);
         stage = new Stage(game.viewport);
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("uiskin.json"));

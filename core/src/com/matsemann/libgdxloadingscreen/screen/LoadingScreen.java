@@ -14,17 +14,15 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.khrystunov.thrustcopter.BaseScene;
 import com.khrystunov.thrustcopter.MenuScene;
 import com.khrystunov.thrustcopter.ThrustCopter;
-import com.khrystunov.thrustcopter.ThrustCopterScene;
 import com.matsemann.libgdxloadingscreen.LoadingBar;
 
 /**
  * @author Mats Svensson
  */
-public class LoadingScreen extends ScreenAdapter {
-
-    ThrustCopter game;
+public class LoadingScreen extends BaseScene {
 
     private Stage stage;
 
@@ -40,7 +38,7 @@ public class LoadingScreen extends ScreenAdapter {
     private Actor loadingBar;
 
     public LoadingScreen(ThrustCopter thrustCopter) {
-        game = thrustCopter;
+        super(thrustCopter);
     }
 
     @Override

@@ -15,9 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
-public class ThrustCopterScene extends ScreenAdapter {
-    private ThrustCopter game;
-
+public class ThrustCopterScene extends BaseScene {
     static enum GameState {
         INIT,
         ACTION,
@@ -109,7 +107,7 @@ public class ThrustCopterScene extends ScreenAdapter {
     ParticleEffect smoke, explosion;
 
     public ThrustCopterScene(ThrustCopter thrustCopter) {
-        game = thrustCopter;
+        super(thrustCopter);
         batch = thrustCopter.batch;
         camera = thrustCopter.camera;
         atlas = thrustCopter.atlas;
