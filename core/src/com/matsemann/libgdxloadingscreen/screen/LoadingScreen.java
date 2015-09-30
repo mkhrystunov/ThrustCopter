@@ -87,6 +87,7 @@ public class LoadingScreen extends BaseScene {
         game.manager.load("sounds/fuel.ogg", Sound.class);
         game.manager.load("ThrustCopter.pack", TextureAtlas.class);
         game.manager.load("title.png", Texture.class);
+        game.manager.load("life.png", Texture.class);
         game.manager.load("fonts/comic-40.fnt", BitmapFont.class);
         game.manager.load("particles/smoke", ParticleEffect.class);
         game.manager.load("particles/explosion", ParticleEffect.class);
@@ -132,6 +133,7 @@ public class LoadingScreen extends BaseScene {
 
     @Override
     public void render(float delta) {
+        super.render(delta);
         // Clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

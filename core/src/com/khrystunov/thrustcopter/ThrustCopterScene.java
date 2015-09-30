@@ -2,12 +2,12 @@ package com.khrystunov.thrustcopter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -66,7 +66,7 @@ public class ThrustCopterScene extends BaseScene {
     float score;
     float fuelCount;
     float shieldCount;
-    TextureRegion fuelIndicator;
+    Texture fuelIndicator;
     float fuelPercentage;
 
     InputAdapter inputAdapter = new InputAdapter() {
@@ -136,7 +136,7 @@ public class ThrustCopterScene extends BaseScene {
         meteorTextures.add(atlas.findRegion("meteorBrown_tiny1"));
         meteorTextures.add(atlas.findRegion("meteorBrown_tiny2"));
 
-        fuelIndicator = atlas.findRegion("life");
+        fuelIndicator = game.manager.get("life.png", Texture.class);
 
         plane = new Animation(
                 0.05f,
@@ -229,7 +229,7 @@ public class ThrustCopterScene extends BaseScene {
         float deltaPosition = planePosition.x - planeDefaultPosition.x;
 
         fuelCount -= 6 * deltaTime;
-        fuelPercentage = fuelIndicator.getRegionWidth() * fuelCount / 100;
+        fuelPercentage = fuelIndicator.getWidth() * fuelCount / 100;
         shieldCount -= deltaTime;
 
         terrainOffset -= deltaPosition;
@@ -366,18 +366,17 @@ public class ThrustCopterScene extends BaseScene {
                     batch.setColor(Color.BLUE);
                     batch.draw(shield.getKeyFrame(planeAnimTime), x, y);
                     batch.setColor(Color.WHITE);
-                }
-                smoke.draw(batch);
-                if (shieldCount > 0) {
+
                     game.font.draw(batch, String.format("%d", (int) shieldCount), 390, 450);
                 }
+                smoke.draw(batch);
                 game.font.draw(batch, String.format("%d", (int) (starCount + score)), 700, 450);
                 break;
         }
         batch.setColor(Color.BLACK);
         batch.draw(fuelIndicator, 10, 350);
         batch.setColor(Color.WHITE);
-        batch.draw(fuelIndicator, 10, 350, 0, 0, fuelPercentage, fuelIndicator.getRegionHeight(), 1, 1, 0);
+        batch.draw(fuelIndicator, 10, 350, 0, 0, (int)fuelPercentage, fuelIndicator.getHeight());
         batch.end();
     }
 
